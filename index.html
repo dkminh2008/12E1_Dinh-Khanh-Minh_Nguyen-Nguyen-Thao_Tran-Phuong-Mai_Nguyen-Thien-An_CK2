@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trang chủ — Bearish Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="index.css"/>
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo-wrap" aria-label="Bearish – Trang chủ">
+    <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="11" r="6" fill="#c97b4b"/>
+      <circle cx="10" cy="11" r="3.2" fill="#e8a080"/>
+      <circle cx="38" cy="11" r="6" fill="#c97b4b"/>
+      <circle cx="38" cy="11" r="3.2" fill="#e8a080"/>
+      <circle cx="24" cy="22" r="15" fill="#c97b4b"/>
+      <circle cx="24" cy="23" r="10" fill="#e8a080"/>
+      <circle cx="19.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+      <circle cx="20.3" cy="18.7" r="0.7" fill="white"/>
+      <circle cx="28.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+      <circle cx="29.3" cy="18.7" r="0.7" fill="white"/>
+      <ellipse cx="24" cy="24" rx="3" ry="2" fill="#6b3f23"/>
+      <path d="M21 26.5 Q24 29.5 27 26.5" stroke="#6b3f23" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">BEARISH</span>
+  </a>
+
+  <button type="button" class="nav-toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="siteNav">
+    <a href="index.html" class="is-active">Trang chủ</a>
+    <a href="shop.html">Cửa hàng</a>
+    <a href="product.html">Chi tiết SP</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">Giới thiệu</a>
+    <a href="contact.html">Liên hệ</a>
+    <a href="cart.html">Giỏ hàng</a>
+  </nav>
+ 
+  <div class="header-actions">
+    <button class="icon-btn" id="searchToggle" aria-label="Tìm kiếm">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+
+    <button class="icon-btn" id="cartToggle" aria-label="Giỏ hàng">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+ 
+
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-container">
+    <button class="search-close" id="searchClose" aria-label="Đóng">✕</button>
+    <p class="search-label">Tìm kiếm sản phẩm</p>
+    <div class="search-input-wrap">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm..." autocomplete="off"/>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-suggestions">
+      <span>Gợi ý:</span>
+      <button class="suggest-tag" onclick="doSearch('Gấu')">Gấu</button>
+      <button class="suggest-tag" onclick="doSearch('Fuggler')">Fuggler</button>
+      <button class="suggest-tag" onclick="doSearch('Thỏ')">Thỏ</button>
+      <button class="suggest-tag" onclick="doSearch('Rồng')">Rồng</button>
+    </div>
+  </div>
+</div>
+ 
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Giỏ hàng">
+  <div class="cart-header">
+    <h3>🛒 Giỏ hàng</h3>
+    <button class="cart-close" id="cartClose" aria-label="Đóng">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🧸</div>
+      <p>Giỏ hàng trống</p>
+      <span>Hãy thêm vài chú gấu vào nhé!</span>
+    </div>
+    <ul class="cart-list" id="cartList"></ul>
+  </div>
+  <div class="cart-footer" id="cartFooter">
+    <div class="cart-total">
+      <span>Tổng cộng</span>
+      <strong id="cartTotal">0đ</strong>
+    </div>
+    <button type="button" class="btn-checkout">Thanh toán ngay →</button>
+    <a href="cart.html" class="cart-full-page-link">Xem giỏ hàng dạng bảng →</a>
+    <button type="button" class="btn-continue" onclick="closeCart()">← Tiếp tục mua sắm</button>
+  </div>
+</aside>
+ 
+
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-text">
+      <span class="hero-tag">✦ BST Xuân – Hè 2026</span>
+      <h1>Bộ sưu tập gấu bông<br/><em>Xuân – Hè 2026</em></h1>
+      <p>Ôm lấy trái tim bạn · Nâng niu từng chú gấu</p>
+      <div class="hero-actions">
+        <a href="shop.html" class="hero-btn-primary-link">Shop Now →</a>
+        <a href="#new-products" class="hero-btn-secondary">Xem mới về</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>2,400+</strong><span>Khách hàng</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><strong>4.9★</strong><span>Đánh giá</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><strong>100+</strong><span>Sản phẩm</span></div>
+      </div>
+    </div>
+
+    <div class="hero-img-wrap">
+      <div class="hero-img-frame">
+        <img
+          src="images/hero.jpg"
+          alt="Cô gái ôm gấu bông"
+          class="hero-img"
+        />
+        <div class="hero-img-overlay"></div>
+      </div>
+      <div class="hero-float-badge">
+        <span class="hfb-icon">🧸</span>
+        <div>
+          <strong>Freeship toàn quốc</strong>
+          <span>Đơn từ 500.000đ</span>
+        </div>
+      </div>
+      <div class="hero-float-tag">
+        <span>✦ Limited Edition 2026</span>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+
+<section class="features">
+  <div class="feature">
+    <div class="feature-icon">🚚</div>
+    <h3>Free Shipping</h3>
+    <p>Miễn phí vận chuyển toàn quốc</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">💬</div>
+    <h3>24/7 Support</h3>
+    <p>Hỗ trợ khách hàng mọi lúc</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🔒</div>
+    <h3>Secure Payment</h3>
+    <p>Thanh toán an toàn</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">↩️</div>
+    <h3>Easy Return</h3>
+    <p>Đổi trả trong 7 ngày</p>
+  </div>
+</section>
+ 
+
+<section class="banner-section" id="banner">
+  <div class="banner-grid">
+
+    <div class="banner-card banner-card--main">
+      <div class="banner-card-bg banner-card-bg--jellycat"></div>
+      <div class="banner-card-content">
+        <span class="banner-eyebrow">✦ Bộ sưu tập đặc biệt</span>
+        <h2>Jellycat<br/><em>Flagship</em><br/>Collection</h2>
+        <p>Những chú thú nhồi bông tinh xảo nhất từ thương hiệu Jellycat — mỗi chiếc là một tác phẩm nghệ thuật.</p>
+        <a href="shop.html" class="banner-btn banner-btn--light">Khám phá ngay →</a>
+      </div>
+      <div class="banner-card-deco" aria-hidden="true">
+        <span class="banner-emoji be1">🧸</span>
+        <span class="banner-emoji be2">🐻</span>
+        <span class="banner-emoji be3">🐨</span>
+      </div>
+    </div>
+
+    <div class="banner-stack">
+ 
+      <div class="banner-card banner-card--sm banner-card--blush">
+        <div class="banner-card-content">
+          <span class="banner-eyebrow banner-eyebrow--caramel">🎁 Quà tặng hoàn hảo</span>
+          <h3>Set quà<br/><em>sinh nhật</em></h3>
+          <p>Gấu bông + hộp kraft thủ công + thiệp viết tay. Giao tận nơi toàn quốc.</p>
+          <a href="shop.html" class="banner-btn banner-btn--dark">Chọn set quà →</a>
+        </div>
+        <div class="banner-card-deco" aria-hidden="true">
+          <span class="banner-emoji banner-emoji--gift">🎀</span>
+        </div>
+      </div>
+ 
+      <div class="banner-card banner-card--sm banner-card--peach">
+        <div class="banner-card-content">
+          <span class="banner-eyebrow banner-eyebrow--brown">✨ Mới về tuần này</span>
+          <h3>Sản phẩm<br/><em>mới nhất</em></h3>
+          <p>Những thú bông mới nhất vừa cập bến — đáng yêu, độc đáo và siêu mềm.</p>
+          <a href="#new-products" class="banner-btn banner-btn--dark">Xem ngay →</a>
+        </div>
+        <div class="banner-card-deco" aria-hidden="true">
+          <span class="banner-emoji banner-emoji--bear-sm">🧸</span>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+ 
+ 
+<section class="products" id="products">
+  <div class="section-head">
+    <h2>CÁC SẢN PHẨM NỔI BẬT</h2>
+    <p>Được yêu thích nhất mùa này</p>
+  </div>
+ 
+  <div class="product-grid">
+ 
+    <div class="product" data-name="Ngựa bông mềm mại" data-price="1200000" data-category="jellycat">
+      <span class="prod-badge badge-hot">Hot</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-ngua.jpg" alt="Ngựa bông mềm mại" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Ngựa bông mềm mại</h4>
+        <p class="prod-price">1.200.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Túi trà bé nhỏ" data-price="599000" data-category="jellycat">
+      <div class="prod-img-wrap">
+        <img src="images/sp-tra.jpg" alt="Túi trà bé nhỏ" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Túi trà bé nhỏ</h4>
+        <p class="prod-price">599.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Chú vịt buồn bã" data-price="899000" data-category="jellycat">
+      <span class="prod-badge badge-new">New</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-vit.jpg" alt="Chú vịt buồn bã" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Chú vịt buồn bã</h4>
+        <p class="prod-price">899.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Thỏ xanh to" data-price="3000000" data-category="jellycat">
+      <span class="prod-badge badge-limited">Limited</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-tho.jpg" alt="Thỏ xanh to" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Thỏ xanh to</h4>
+        <p class="prod-price">3.000.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Hạt dẻ cười bé nhỏ" data-price="699000" data-category="jellycat">
+      <div class="prod-img-wrap">
+        <img src="images/sp-hatde.jpg" alt="Hạt dẻ cười bé nhỏ" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Hạt dẻ cười bé nhỏ</h4>
+        <p class="prod-price">699.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Rồng xanh đáng yêu" data-price="1200000" data-category="jellycat">
+      <span class="prod-badge badge-hot">Hot</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-rong.jpg" alt="Rồng xanh đáng yêu" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Rồng xanh đáng yêu</h4>
+        <p class="prod-price">1.200.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Gấu hươu" data-price="699000" data-category="jellycat">
+      <div class="prod-img-wrap">
+        <img src="images/sp-gau-huong.jpg" alt="Gấu hươu" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Gấu hươu</h4>
+        <p class="prod-price">699.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Gấu ong béo" data-price="799000" data-category="jellycat">
+      <span class="prod-badge badge-new">New</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-gau-ong.jpg" alt="Gấu ong béo" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Gấu ong béo</h4>
+        <p class="prod-price">799.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+
+<section class="new-products" id="new-products">
+  <div class="section-head">
+    <span class="section-eyebrow">✨ Vừa cập bến</span>
+    <h2>SẢN PHẨM MỚI</h2>
+    <p>Những người bạn mới nhất vừa gia nhập đại gia đình Bearish — đừng bỏ lỡ!</p>
+  </div>
+ 
+  <div class="product-grid">
+ 
+    <div class="product" data-name="Fuggler đen sún răng" data-price="450000" data-category="fuggler">
+      <span class="prod-badge badge-new">New</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-fuggler-den.jpg" alt="Fuggler đen sún răng" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Fuggler đen sún răng</h4>
+        <p class="prod-price">450.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Fuggler mix" data-price="500000" data-category="fuggler">
+      <span class="prod-badge badge-new">New</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-fuggler-mix.jpg" alt="Fuggler mix" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Fuggler mix</h4>
+        <p class="prod-price">500.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Fuggler xấu xí" data-price="500000" data-category="fuggler">
+      <span class="prod-badge badge-new">New</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-fuggler-xau.jpg" alt="Fuggler xấu xí" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Fuggler xấu xí</h4>
+        <p class="prod-price">500.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="product" data-name="Fuggler mắt hí đi bơi" data-price="550000" data-category="fuggler">
+      <span class="prod-badge badge-new">New</span>
+      <div class="prod-img-wrap">
+        <img src="images/sp-fuggler-boi.jpg" alt="Fuggler mắt hí đi bơi" loading="lazy"/>
+      </div>
+      <div class="prod-info">
+        <h4>Fuggler mắt hí đi bơi</h4>
+        <p class="prod-price">550.000đ</p>
+        <div class="prod-actions">
+          <a href="product.html" class="btn-detail">Chi tiết</a>
+          <button type="button" class="btn-add" onclick="addToCart(this)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+ 
+ 
+
+<section class="sm-banner-strip">
+  <div class="sm-banner-track">
+    <span>🎉 Sale up to 50% — Chỉ hôm nay</span>
+    <span class="sm-sep">✦</span>
+    <span>🚚 Freeship đơn từ 500K</span>
+    <span class="sm-sep">✦</span>
+    <span>🎁 Tặng thiệp viết tay mọi đơn hàng</span>
+    <span class="sm-sep">✦</span>
+    <span>🧸 Sản phẩm mới về mỗi tuần</span>
+    <span class="sm-sep">✦</span>
+    <span>🎉 Sale up to 50% — Chỉ hôm nay</span>
+    <span class="sm-sep">✦</span>
+    <span>🚚 Freeship đơn từ 500K</span>
+    <span class="sm-sep">✦</span>
+    <span>🎁 Tặng thiệp viết tay mọi đơn hàng</span>
+    <span class="sm-sep">✦</span>
+    <span>🧸 Sản phẩm mới về mỗi tuần</span>
+    <span class="sm-sep">✦</span>
+  </div>
+</section>
+ 
+<section class="small-banner">
+  <div class="banner-inner">
+    <div class="small-banner-left">
+      <span class="sb-tag">⚡ Flash Sale</span>
+      <h2>Sale up to <em>50%</em></h2>
+      <p>Ưu đãi có hạn · Số lượng limited · Nhanh tay kẻo lỡ</p>
+      <div class="sb-countdown" id="sbCountdown">
+        <div class="sbc-item"><span id="sbH">05</span><small>giờ</small></div>
+        <span class="sbc-sep">:</span>
+        <div class="sbc-item"><span id="sbM">59</span><small>phút</small></div>
+        <span class="sbc-sep">:</span>
+        <div class="sbc-item"><span id="sbS">00</span><small>giây</small></div>
+      </div>
+    </div>
+    <div class="small-banner-right">
+      <a href="shop.html" class="small-banner-cta">Mua ngay →</a>
+      <div class="sb-promo-code">
+        Dùng mã: <strong>BEARISH50</strong>
+        <button class="copy-code" onclick="copyCode()">Sao chép</button>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+ 
+
+<section class="newsletter-section" id="newsletter">
+  <div class="newsletter-section-inner">
+ 
+    <div class="nl-left">
+      <div class="nl-bear-icon" aria-hidden="true">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="18" r="10" fill="#c97b4b"/>
+          <circle cx="17" cy="18" r="5.5" fill="#e8a080"/>
+          <circle cx="63" cy="18" r="10" fill="#c97b4b"/>
+          <circle cx="63" cy="18" r="5.5" fill="#e8a080"/>
+          <circle cx="40" cy="38" r="25" fill="#c97b4b"/>
+          <circle cx="40" cy="40" r="17" fill="#e8a080"/>
+          <circle cx="32" cy="33" r="3.5" fill="#2c1a0e"/>
+          <circle cx="33.5" cy="31.5" r="1.1" fill="white"/>
+          <circle cx="48" cy="33" r="3.5" fill="#2c1a0e"/>
+          <circle cx="49.5" cy="31.5" r="1.1" fill="white"/>
+          <ellipse cx="40" cy="40" rx="5" ry="3.5" fill="#6b3f23"/>
+          <path d="M35 44 Q40 49 45 44" stroke="#6b3f23" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nl-text">
+        <span class="nl-eyebrow">✦ Không bỏ lỡ bất kỳ điều gì</span>
+        <h2>Đăng ký nhận<br/><em>ưu đãi độc quyền</em></h2>
+        <p>Sản phẩm mới · Flash sale · Voucher sinh nhật<br/>Gửi thẳng vào hộp thư của bạn mỗi tuần.</p>
+        <ul class="nl-perks">
+          <li><span class="nl-check">✓</span> Giảm 10% cho đơn đầu tiên</li>
+          <li><span class="nl-check">✓</span> Thông báo sản phẩm limited trước mọi người</li>
+          <li><span class="nl-check">✓</span> Quà tặng bí ẩn mỗi tháng</li>
+        </ul>
+      </div>
+    </div>
+ 
+    <div class="nl-right">
+      <form class="nl-form" onsubmit="return handleNLSubmit(event)">
+        <label class="nl-label">Email của bạn</label>
+        <div class="nl-input-row">
+          <input type="email" id="nlEmail" placeholder="ten@gmail.com" required/>
+          <button type="submit">
+            Đăng ký
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+        </div>
+        <p class="nl-note">🔒 Miễn phí · Không spam · Huỷ bất kỳ lúc nào</p>
+      </form>
+      <div class="nl-social-row">
+        <span>Hoặc theo dõi chúng tôi:</span>
+        <div class="nl-socials">
+          <a href="#" aria-label="Facebook" class="nl-soc-btn nl-soc-btn--fb">
+            <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="nl-soc-btn nl-soc-btn--ig">
+            <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+          </a>
+          <a href="#" aria-label="TikTok" class="nl-soc-btn nl-soc-btn--tt">
+            <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="nl-trust">
+        <div class="nl-trust-item"><strong>12,000+</strong><span>người đã đăng ký</span></div>
+        <div class="nl-trust-sep"></div>
+        <div class="nl-trust-item"><strong>4.9★</strong><span>độ hài lòng</span></div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+ 
+<footer class="site-footer">
+ 
+  <div class="footer-top">
+    <div class="footer-inner">
+ 
+      <div class="footer-col footer-brand-col">
+        <a href="index.html" class="footer-logo-wrap" aria-label="Bearish">
+          <svg class="footer-logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="11" r="6" fill="#c97b4b"/>
+            <circle cx="10" cy="11" r="3.2" fill="#e8a080"/>
+            <circle cx="38" cy="11" r="6" fill="#c97b4b"/>
+            <circle cx="38" cy="11" r="3.2" fill="#e8a080"/>
+            <circle cx="24" cy="22" r="15" fill="#c97b4b"/>
+            <circle cx="24" cy="23" r="10" fill="#e8a080"/>
+            <circle cx="19.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+            <circle cx="20.3" cy="18.7" r="0.7" fill="white"/>
+            <circle cx="28.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+            <circle cx="29.3" cy="18.7" r="0.7" fill="white"/>
+            <ellipse cx="24" cy="24" rx="3" ry="2" fill="#6b3f23"/>
+            <path d="M21 26.5 Q24 29.5 27 26.5" stroke="#6b3f23" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </svg>
+          <span class="footer-logo-text">BEARISH</span>
+        </a>
+        <p class="footer-tagline">Mỗi cái ôm là một câu chuyện<br/>yêu thương. 🧸</p>
+        <div class="footer-info-list">
+          <div class="footer-info-item">
+            <span class="fi-icon">📍</span>
+            <span>123 Đường Hoa Hồng, Quận 3,<br/>TP. Hồ Chí Minh</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="fi-icon">📞</span>
+            <span>0901 234 567</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="fi-icon">✉️</span>
+            <span>bearishloveyou@gmail.com</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="fi-icon">🕐</span>
+            <span>Thứ 2 – Chủ nhật: 8:00 – 22:00</span>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="footer-col">
+        <h5>Cửa hàng</h5>
+        <ul>
+          <li><a href="shop.html">Tất cả sản phẩm</a></li>
+          <li><a href="index.html#new-products">Mới về</a></li>
+          <li><a href="product.html">Sản phẩm tiêu biểu</a></li>
+          <li><a href="cart.html">Giỏ hàng</a></li>
+          <li><a href="index.html#banner">Flash Sale</a></li>
+        </ul>
+      </div>
+ 
+      <div class="footer-col">
+        <h5>Hỗ trợ khách hàng</h5>
+        <ul>
+          <li><a href="blog.html">Blog &amp; tin tức</a></li>
+          <li><a href="about.html">Giới thiệu Bearish</a></li>
+          <li><a href="contact.html">Liên hệ shop</a></li>
+          <li><a href="contact.html">Câu hỏi thường gặp</a></li>
+          <li><a href="shop.html">Hướng dẫn mua hàng</a></li>
+        </ul>
+      </div>
+ 
+      <div class="footer-col footer-social-col">
+        <h5>Kết nối với Bearish</h5>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <div class="social-icon social-icon--fb">
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>Facebook</strong>
+              <span>@bearishstore.vn</span>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="Instagram">
+            <div class="social-icon social-icon--ig">
+              <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>Instagram</strong>
+              <span>@bearish.official</span>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="TikTok">
+            <div class="social-icon social-icon--tt">
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>TikTok</strong>
+              <span>@bearish.vn</span>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="Shopee">
+            <div class="social-icon social-icon--shopee">
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>Shopee</strong>
+              <span>shopee.vn/bearish</span>
+            </div>
+          </a>
+        </div>
+ 
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <p>© 2026 Bearish Store. Tất cả quyền được bảo lưu.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Chính sách bảo mật</a>
+        <span>·</span>
+        <a href="#">Điều khoản sử dụng</a>
+        <span>·</span>
+        <a href="#">Sitemap</a>
+      </div>
+      <div class="footer-payment-icons">
+        <span class="pay-badge">VISA</span>
+        <span class="pay-badge">MasterCard</span>
+        <span class="pay-badge">MoMo</span>
+        <span class="pay-badge">ZaloPay</span>
+      </div>
+    </div>
+  </div>
+ 
+</footer>
+ 
+
+<div class="chat-bubble" id="chatBubble" onclick="toggleChat()" aria-label="Chat hỗ trợ">
+  <span class="chat-icon">💬</span>
+  <span class="chat-label">Hỗ trợ</span>
+  <span class="chat-dot"></span>
+</div>
+ 
+<div class="chat-box" id="chatBox">
+  <div class="chat-box-header">
+    <div class="chat-agent">
+      <div class="agent-avatar">🐻</div>
+      <div>
+        <strong>Bearish Support</strong>
+        <span class="agent-status">● Đang hoạt động</span>
+      </div>
+    </div>
+    <button onclick="toggleChat()" aria-label="Đóng chat">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg msg-agent">
+      <div class="msg-bubble">Xin chào! 🧸 Mình có thể giúp gì cho bạn hôm nay?</div>
+      <span class="msg-time">Vừa xong</span>
+    </div>
+  </div>
+  <div class="chat-quick-btns">
+    <button onclick="sendQuick('Tôi muốn hỏi về đơn hàng')">📦 Đơn hàng</button>
+    <button onclick="sendQuick('Tư vấn sản phẩm')">🧸 Tư vấn</button>
+    <button onclick="sendQuick('Chính sách đổi trả')">↩️ Đổi trả</button>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Nhắn tin..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button onclick="sendChat()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+</div>
+ 
+
+<button class="back-to-top" id="backToTop" aria-label="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script src="main.js" defer></script>
+</body>
+</html>

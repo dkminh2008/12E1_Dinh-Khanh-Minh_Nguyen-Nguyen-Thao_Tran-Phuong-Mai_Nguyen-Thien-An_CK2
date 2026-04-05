@@ -1,0 +1,59 @@
+/* shop.html */
+
+.shop-section {
+  padding: 48px 60px 72px;
+  background: var(--cream);
+}
+
+.shop-toolbar {
+  max-width: 1300px;
+  margin: 0 auto 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  justify-content: space-between;
+}
+
+.shop-toolbar label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-right: 8px;
+}
+
+.shop-toolbar select {
+  padding: 10px 14px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid rgba(201, 123, 75, 0.35);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--dark);
+  cursor: pointer;
+}
+
+.shop-toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-count {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .shop-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .shop-toolbar-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giỏ hàng — Bearish Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="cart.css"/>
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo-wrap" aria-label="Bearish – Trang chủ">
+    <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="11" r="6" fill="#c97b4b"/>
+      <circle cx="10" cy="11" r="3.2" fill="#e8a080"/>
+      <circle cx="38" cy="11" r="6" fill="#c97b4b"/>
+      <circle cx="38" cy="11" r="3.2" fill="#e8a080"/>
+      <circle cx="24" cy="22" r="15" fill="#c97b4b"/>
+      <circle cx="24" cy="23" r="10" fill="#e8a080"/>
+      <circle cx="19.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+      <circle cx="28.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+      <ellipse cx="24" cy="24" rx="3" ry="2" fill="#6b3f23"/>
+      <path d="M21 26.5 Q24 29.5 27 26.5" stroke="#6b3f23" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">BEARISH</span>
+  </a>
+  <button type="button" class="nav-toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="site-nav" id="siteNav">
+    <a href="index.html">Trang chủ</a>
+    <a href="shop.html">Cửa hàng</a>
+    <a href="product.html">Chi tiết SP</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">Giới thiệu</a>
+    <a href="contact.html">Liên hệ</a>
+    <a href="cart.html" class="is-active">Giỏ hàng</a>
+  </nav>
+  <div class="header-actions">
+    <button type="button" class="icon-btn" id="searchToggle" aria-label="Tìm kiếm">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+    <button type="button" class="icon-btn" id="cartToggle" aria-label="Giỏ hàng">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-container">
+    <button type="button" class="search-close" id="searchClose" aria-label="Đóng">✕</button>
+    <p class="search-label">Tìm kiếm sản phẩm</p>
+    <div class="search-input-wrap">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm..." autocomplete="off"/>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Giỏ hàng">
+  <div class="cart-header">
+    <h3>🛒 Giỏ hàng</h3>
+    <button type="button" class="cart-close" id="cartClose" aria-label="Đóng">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🧸</div>
+      <p>Giỏ hàng trống</p>
+      <span>Hãy thêm vài chú gấu vào nhé!</span>
+    </div>
+    <ul class="cart-list" id="cartList"></ul>
+  </div>
+  <div class="cart-footer" id="cartFooter">
+    <div class="cart-total">
+      <span>Tổng cộng</span>
+      <strong id="cartTotal">0đ</strong>
+    </div>
+    <button type="button" class="btn-checkout">Thanh toán ngay →</button>
+    <a href="cart.html" class="cart-full-page-link">Xem giỏ hàng dạng bảng →</a>
+    <button type="button" class="btn-continue" onclick="closeCart()">← Tiếp tục mua sắm</button>
+  </div>
+</aside>
+
+<main class="page-main">
+  <header class="page-hero">
+    <div class="page-hero-inner">
+      <p class="breadcrumb"><a href="index.html">Trang chủ</a> / Giỏ hàng</p>
+      <h1>Giỏ hàng của bạn</h1>
+      <p>Bảng tóm tắt đơn hàng (UI demo) — cùng sản phẩm &amp; ảnh với cửa hàng.</p>
+    </div>
+  </header>
+
+  <section class="cart-page-section">
+    <div class="cart-page-inner">
+      <div class="cart-table-wrap">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th class="col-price">Đơn giá</th>
+              <th class="col-qty">Số lượng</th>
+              <th class="col-total">Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="cart-table-product">
+                  <img src="images/sp-ngua.jpg" alt="Ngựa bông mềm mại"/>
+                  <div>
+                    <strong>Ngựa bông mềm mại</strong>
+                    <div class="cart-page-sku">SKU: BR-NGUA-01</div>
+                  </div>
+                </div>
+              </td>
+              <td class="col-price">1.200.000đ</td>
+              <td class="col-qty">1</td>
+              <td class="col-total">1.200.000đ</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cart-table-product">
+                  <img src="images/sp-tra.jpg" alt="Túi trà bé nhỏ"/>
+                  <div>
+                    <strong>Túi trà bé nhỏ</strong>
+                    <div class="cart-page-sku">SKU: BR-TEA-02</div>
+                  </div>
+                </div>
+              </td>
+              <td class="col-price">599.000đ</td>
+              <td class="col-qty">2</td>
+              <td class="col-total">1.198.000đ</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cart-table-product">
+                  <img src="images/sp-fuggler-den.jpg" alt="Fuggler đen sún răng"/>
+                  <div>
+                    <strong>Fuggler đen sún răng</strong>
+                    <div class="cart-page-sku">SKU: BR-FUG-09</div>
+                  </div>
+                </div>
+              </td>
+              <td class="col-price">450.000đ</td>
+              <td class="col-qty">1</td>
+              <td class="col-total">450.000đ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cart-summary">
+        <div class="cart-summary-actions">
+          <a href="shop.html" class="btn-outline-lg">← Tiếp tục mua sắm</a>
+          <button type="button" class="btn-primary-lg" onclick="showToast('Demo: chuyển tới thanh toán')">Thanh toán</button>
+        </div>
+        <div class="cart-summary-totals">
+          <p class="sub">Tạm tính: <strong>2.848.000đ</strong></p>
+          <p class="sub">Phí vận chuyển: <strong>0đ</strong> <span class="cart-ship-hint">(đơn &gt; 500K)</span></p>
+          <p class="grand">2.848.000đ</p>
+        </div>
+      </div>
+
+      <p class="link-cart-note">
+        Giỏ thật khi bạn thêm từ Shop / Trang chủ được lưu trong trình duyệt — mở icon giỏ góc phải để xem nhanh.
+        Bảng trên là ví dụ cố định cho bài tập.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-inner">
+      <div class="footer-col footer-brand-col">
+        <a href="index.html" class="footer-logo-wrap" aria-label="Bearish">
+          <svg class="footer-logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="11" r="6" fill="#c97b4b"/>
+            <circle cx="10" cy="11" r="3.2" fill="#e8a080"/>
+            <circle cx="38" cy="11" r="6" fill="#c97b4b"/>
+            <circle cx="38" cy="11" r="3.2" fill="#e8a080"/>
+            <circle cx="24" cy="22" r="15" fill="#c97b4b"/>
+            <circle cx="24" cy="23" r="10" fill="#e8a080"/>
+            <circle cx="19.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+            <circle cx="20.3" cy="18.7" r="0.7" fill="white"/>
+            <circle cx="28.5" cy="19.5" r="2.2" fill="#2c1a0e"/>
+            <circle cx="29.3" cy="18.7" r="0.7" fill="white"/>
+            <ellipse cx="24" cy="24" rx="3" ry="2" fill="#6b3f23"/>
+            <path d="M21 26.5 Q24 29.5 27 26.5" stroke="#6b3f23" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </svg>
+          <span class="footer-logo-text">BEARISH</span>
+        </a>
+        <p class="footer-tagline">Mỗi cái ôm là một câu chuyện<br/>yêu thương. 🧸</p>
+        <div class="footer-info-list">
+          <div class="footer-info-item">
+            <span class="fi-icon">📍</span>
+            <span>123 Đường Hoa Hồng, Quận 3,<br/>TP. Hồ Chí Minh</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="fi-icon">📞</span>
+            <span>0901 234 567</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="fi-icon">✉️</span>
+            <span>bearishloveyou@gmail.com</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="fi-icon">🕐</span>
+            <span>Thứ 2 – Chủ nhật: 8:00 – 22:00</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Cửa hàng</h5>
+        <ul>
+          <li><a href="shop.html">Tất cả sản phẩm</a></li>
+          <li><a href="index.html#new-products">Mới về</a></li>
+          <li><a href="product.html">Sản phẩm tiêu biểu</a></li>
+          <li><a href="cart.html">Giỏ hàng</a></li>
+          <li><a href="index.html#banner">Flash Sale</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Hỗ trợ khách hàng</h5>
+        <ul>
+          <li><a href="blog.html">Blog &amp; tin tức</a></li>
+          <li><a href="about.html">Giới thiệu Bearish</a></li>
+          <li><a href="contact.html">Liên hệ shop</a></li>
+          <li><a href="contact.html">Câu hỏi thường gặp</a></li>
+          <li><a href="shop.html">Hướng dẫn mua hàng</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-social-col">
+        <h5>Kết nối với Bearish</h5>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <div class="social-icon social-icon--fb">
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>Facebook</strong>
+              <span>@bearishstore.vn</span>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="Instagram">
+            <div class="social-icon social-icon--ig">
+              <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>Instagram</strong>
+              <span>@bearish.official</span>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="TikTok">
+            <div class="social-icon social-icon--tt">
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>TikTok</strong>
+              <span>@bearish.vn</span>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="Shopee">
+            <div class="social-icon social-icon--shopee">
+              <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            </div>
+            <div class="social-info">
+              <strong>Shopee</strong>
+              <span>shopee.vn/bearish</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <p>© 2026 Bearish Store. Tất cả quyền được bảo lưu.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Chính sách bảo mật</a>
+        <span>·</span>
+        <a href="#">Điều khoản sử dụng</a>
+        <span>·</span>
+        <a href="#">Sitemap</a>
+      </div>
+      <div class="footer-payment-icons">
+        <span class="pay-badge">VISA</span>
+        <span class="pay-badge">MasterCard</span>
+        <span class="pay-badge">MoMo</span>
+        <span class="pay-badge">ZaloPay</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button type="button" class="back-to-top" id="backToTop" aria-label="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<div class="toast" id="toast"></div>
+<script src="main.js" defer></script>
+</body>
+</html>
